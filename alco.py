@@ -343,13 +343,13 @@ class Inicio():
 
       #self.VentPrincipal.iconify()
       self.cargadepeso.title("Vamos a registrar el peso: ")
-      self.cargadepeso.geometry('530x500+300+300')
+      self.cargadepeso.geometry('630x260+300+300')
       self.lblimagenbalanza = Label(self.cargadepeso, text = "Qué bueno que estés acá haciendo esto {} {}".format(self.consulta[0],self.consulta[1]), font ="Arial 16", fg= "blue")
       self.lblimagenbalanza.grid(row = 0, column = 0, padx = 10, pady = 10)
 
       self.frmCargaPeso = LabelFrame(self.cargadepeso, text ="Ahora vamos a anotar tu peso actual")
-      self.frmCargaPeso.grid(row =1, column = 0, columnspan = 2)
-      self.lblPeso = Label(self.frmCargaPeso,text ="Fecha en la que estás registrando el peso:")
+      self.frmCargaPeso.grid(row =1, column = 0, columnspan = 2,padx = 15,pady = 10)
+      self.lblPeso = Label(self.frmCargaPeso,text ="Fecha en la que estás registrando el peso (AAAA-MM-DD):")
       self.lblPeso.grid(row = 1, column = 0, padx = 5, pady = 5)
       self.txtFechaPeso = Entry(self.frmCargaPeso, textvariable = self.dia)
       #self.txtFechaPeso = Entry(self.frmCargaPeso, textvariable = StringVar(value = self.dia.strftime("%d/%b/%Y")))
