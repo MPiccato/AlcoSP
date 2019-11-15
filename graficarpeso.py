@@ -18,8 +18,9 @@ def graficar_datos():
      #veo si la consulta está vacía, sino limpiarla primero
   
 
-    miCursor.execute("SELECT * FROM PESOALQUISTA WHERE NROALQUISTA = 120 ORDER BY FECHAPESO")
+    miCursor.execute("SELECT * FROM PESOALQUISTA WHERE NROALQUISTA = 124 ORDER BY FECHAPESO")
     #miCursor.execute("SELECT * FROM PESOALQUISTA")
+  
   
     fechas = []
     pesos = []
