@@ -16,7 +16,7 @@ Generar el cuadro que muestre la evolución del IMC
 Necesito la BBDD de historial de peso
 
 Voy a generar una base de datos falsa para hacer las pruebas PRUEBAPESO.DB
-Campos requeridos: iD, NOMBRE, APELLIDO, DNI, NRO ALQUISTA, PESO """
+Campos requeridos: NOMBRE, APELLIDO, DNI, NROALQUISTA, PESO """
 
 class EstPeso():
 
