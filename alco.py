@@ -6,7 +6,10 @@ import time
 import datetime
 import sqlite3
 import sys
-
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from  matplotlib import style
+style.use('fivethirtyeight')
 
 
 class Inicio():
@@ -400,10 +403,17 @@ class Inicio():
       self.lblExplicacionIMC = Label(self.frmAvancePeso, text = "Ese IMC implica que tu peso es {}".format(self.EstIMC))
       self.lblExplicacionIMC.grid(row = 2, column = 0, padx = 5, pady = 5)
 
+     
+      
+
 
 
       self.miConexion.commit()
       self.miConexion.close()
+    
+   
+
+      
 
 
 
