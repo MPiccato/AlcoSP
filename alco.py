@@ -333,7 +333,7 @@ class Inicio():
     
       
       self.dia = StringVar()
-      self.dia = datetime.date.today()
+      self.dia = StringVar()
       self.VentPrincipal.state(newstate = 'withdraw')
       self.cargadepeso = Toplevel()
       self.cargadepeso.resizable(width = False, height = False)
@@ -350,7 +350,8 @@ class Inicio():
       self.frmCargaPeso.grid(row =1, column = 0, columnspan = 2)
       self.lblPeso = Label(self.frmCargaPeso,text ="Fecha en la que estás registrando el peso:")
       self.lblPeso.grid(row = 1, column = 0, padx = 5, pady = 5)
-      self.txtFechaPeso = Entry(self.frmCargaPeso, textvariable = StringVar(value = self.dia.strftime("%d/%b/%Y")))
+      self.txtFechaPeso = Entry(self.frmCargaPeso, textvariable = self.dia)
+      #self.txtFechaPeso = Entry(self.frmCargaPeso, textvariable = StringVar(value = self.dia.strftime("%d/%b/%Y")))
       self.txtFechaPeso.grid(row = 1, column = 1, padx = 5, pady = 5)
       self.txtFechaPeso.config(justify="right")
       self.lblUltimoPeso = Label(self.frmCargaPeso, text = "Ingresa por favor el peso actual: ")
@@ -384,7 +385,7 @@ class Inicio():
       self.miConexion=sqlite3.connect(self.db_tabla)
       self.miCursor = self.miConexion.cursor()
       self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
-      self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia),int(self.CorregirPesoVar.get())
+      self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia.get()),int(self.CorregirPesoVar.get())
       self.miCursor.execute(self.query,self.parametros)
      
       print(self.parametros)
@@ -402,12 +403,6 @@ class Inicio():
 
       self.lblExplicacionIMC = Label(self.frmAvancePeso, text = "Ese IMC implica que tu peso es {}".format(self.EstIMC))
       self.lblExplicacionIMC.grid(row = 2, column = 0, padx = 5, pady = 5)
-
-     
-      
-
-
-
       self.miConexion.commit()
       self.miConexion.close()
     
