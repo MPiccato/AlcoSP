@@ -16,9 +16,14 @@ miCursor = MiConexion.cursor()
 
 def graficar_datos():
      #veo si la consulta está vacía, sino limpiarla primero
+
+
+    consulta = ("SELECT * FROM PESOALQUISTA WHERE NROALQUISTA = 124 ORDER BY FECHAPESO")
   
 
-    miCursor.execute("SELECT * FROM PESOALQUISTA WHERE NROALQUISTA = 124 ORDER BY FECHAPESO")
+    
+    
+    miCursor.execute(consulta)
     #miCursor.execute("SELECT * FROM PESOALQUISTA")
   
   
@@ -29,8 +34,10 @@ def graficar_datos():
         fechas.append(filas[3])
         pesos.append(filas[4])
 
-    
-    #plt.title("Evolución del peso de {} {}".format(strNombre[0],strNombre[1]))
+    consultaNombre = (consulta)
+    miCursor.execute(consultaNombre)
+    strNombre = miCursor.fetchone()
+    plt.title("Evolución del peso de {} {}".format(strNombre[0],strNombre[1]))
     plt.xlabel("Fechas del peso")
     plt.ylabel("Peso observado")
     plt.plot(fechas,pesos)
