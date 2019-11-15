@@ -326,12 +326,15 @@ class Inicio():
       
     
     def ventanapeso(self):
+
+    
       
       self.dia = StringVar()
       self.dia = datetime.date.today()
       self.VentPrincipal.state(newstate = 'withdraw')
       self.cargadepeso = Toplevel()
       self.cargadepeso.resizable(width = False, height = False)
+      self.CorregirPesoVar = StringVar()
 
 
       #self.VentPrincipal.iconify()
@@ -352,11 +355,48 @@ class Inicio():
       self.txtUltimoPeso=Entry(self.frmCargaPeso, textvariable = self.CorregirPesoVar) #La variable CorregirPesoVar es para la carga del peso
       self.txtUltimoPeso.grid(row=2, column =1, padx = 5, pady =5)
       self.txtUltimoPeso.config(justify = "right")
-      self.btnAceptarPeso = Button(self.frmCargaPeso, text= "Guardar Peso", width = 10, height = 2)
+      self.btnAceptarPeso = Button(self.frmCargaPeso, text= "Guardar Peso", command = self.GuardarPeso, width = 10, height = 2)
       self.btnAceptarPeso.grid(row = 3, column = 1, padx = 5, pady = 5,sticky = W+E)
       self.btnCorregirPeso = Button(self.frmCargaPeso, text= "Corregir Peso", width = 10, height = 2,command = self.CorregirPeso)
       self.btnCorregirPeso.grid(row = 3, column = 0, padx = 5, pady = 5,sticky = W+E)
     
+
+
+    def GuardarPeso(self):
+      """Esta función mostrará un mensaje con el IMC (si se pudiera calcular)
+      el cálculo del peso posible, el peso deseable y cuántos kilos perdió o ganó.
+      Si perdió kilos tiene que mostrar un mensaje que lo felicite y sino tiene que mostrar
+      un mensaje que lo incentiva"""
+      
+      self.AvancePeso = Toplevel()
+      self.frmAvancePeso = Frame(self.AvancePeso)
+      self.AvancePeso.title("Así van tus avances")
+      self.frmAvancePeso.grid(row = 0, column = 0)
+      self.lblSaludo = Label(self.frmAvancePeso, text="Estadísticas básicas de tu progreso {} {}".format(self.consulta[0],self.consulta[1]), font = 'Arial 16')
+      self.lblSaludo.grid(row = 0, column = 0, padx = 5, pady = 5)
+
+      self.miConexion=sqlite3.connect(self.db_tabla)
+      self.miCursor = self.miConexion.cursor()
+      self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
+      self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia),int(self.CorregirPesoVar.get())
+      self.miCursor.execute(self.query,self.parametros)
+      self.miConexion.commit()
+      self.miConexion.close()
+      print(self.parametros)
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
 
 
 

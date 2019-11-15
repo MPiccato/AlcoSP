@@ -23,7 +23,7 @@ class EstPeso():
     def __init__(self, VentPeso):
 
 
-        self.VentPesoPpal = VentPeso
+        self.VentPesoPpal = VentPeso()
         self.VentPesoPpal.geometry('800x800+100+100')
         self.VentPesoPpal.title("Informe de evolución del peso")
 
