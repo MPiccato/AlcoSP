@@ -19,6 +19,8 @@ def graficar_datos():
         print("Hola {}, tus fechas y pesos son: {} -> {}".format(filas[0],filas[3],filas[4]))
         fechas.append(filas[3])
         pesos.append(filas[4])
+    plt.xlabel("Fechas del peso")
+    plt.ylabel("Peso observado")
     plt.plot(fechas,pesos)
     plt.show()
 
