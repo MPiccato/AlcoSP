@@ -365,6 +365,7 @@ class Inicio():
     def GuardarPeso(self):
 
       self.IMC = float
+      self.EstIMC = ""
       """Esta función mostrará un mensaje con el IMC (si se pudiera calcular)
       el cálculo del peso posible, el peso deseable y cuántos kilos perdió o ganó.
       Si perdió kilos tiene que mostrar un mensaje que lo felicite y sino tiene que mostrar
@@ -387,7 +388,18 @@ class Inicio():
 
       #Cálculo Indice Masa Corporal
       self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
-      print(self.IMC)
+      
+      self.lblIMC = Label(self.frmAvancePeso, text = "Tu IMC actualizado hasta hoy es {}".format(self.IMC))
+      self.lblIMC.grid(row = 1, column = 0, padx = 5, pady = 5)
+
+      if float(self.IMC) >= 24.9 and float(self.IMC) <= 27.9:
+        self.EstIMC = "normal"
+      if float(self.IMC) >=28 and float(self.IMC) <= 34:
+        self.EstIMC = "sobrepeso riesgo menor"
+
+      self.lblExplicacionIMC = Label(self.frmAvancePeso, text = "Ese IMC implica que tu peso es {}".format(self.EstIMC))
+      self.lblExplicacionIMC.grid(row = 2, column = 0, padx = 5, pady = 5)
+
 
 
       self.miConexion.commit()
