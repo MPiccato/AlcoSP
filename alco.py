@@ -363,6 +363,8 @@ class Inicio():
 
 
     def GuardarPeso(self):
+
+      self.IMC = float
       """Esta función mostrará un mensaje con el IMC (si se pudiera calcular)
       el cálculo del peso posible, el peso deseable y cuántos kilos perdió o ganó.
       Si perdió kilos tiene que mostrar un mensaje que lo felicite y sino tiene que mostrar
@@ -380,9 +382,17 @@ class Inicio():
       self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
       self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia),int(self.CorregirPesoVar.get())
       self.miCursor.execute(self.query,self.parametros)
+     
+      print(self.parametros)
+
+      #Cálculo Indice Masa Corporal
+      self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
+      print(self.IMC)
+
+
       self.miConexion.commit()
       self.miConexion.close()
-      print(self.parametros)
+
 
 
 
