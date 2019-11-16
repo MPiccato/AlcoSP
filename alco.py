@@ -459,7 +459,7 @@ class Inicio():
 
       #Cálculo variación del peso
 
-      self.calculovariacionpeso()
+      #self.calculovariacionpeso()
             
 
 
@@ -517,8 +517,8 @@ class Inicio():
 
       self.miConexion = sqlite3.connect("ALQUISTA.db")
       self.miCursor = self.miConexion.cursor()
-      self.datos = self.strNombre.get(),self.strApellido.get(),self.strDNI.get(),self.strFechaNacimiento.get(),self.strFechaInicio.get(),self.strNroAlquista.get()
-      self.miCursor.execute("INSERT INTO ALQUISTAS VALUES (?,?,?,?,?,?)",self.datos)
+      self.datos = self.strNombre.get(),self.strApellido.get(),self.strDNI.get(),self.strFechaNacimiento.get(),self.strFechaInicio.get(),self.strNroAlquista.get(),self.strAltura.get()
+      self.miCursor.execute("INSERT INTO ALQUISTAS VALUES (?,?,?,?,?,?,?)",self.datos)
       self.miConexion.commit()
       self.miConexion.close()
       messagebox.showinfo("Base de Datos", "Registro insertado con éxito")
@@ -543,6 +543,7 @@ class Inicio():
       self.strFechaNacimiento = StringVar()
       self.strFechaInicio = StringVar()
       self.strNroAlquista = StringVar()
+      self.strAltura=StringVar()
       
 
       self.alta_alquista = Toplevel()
@@ -577,18 +578,24 @@ class Inicio():
       self.txtFechaNacimiento = Entry(self.frmalta_alquista,textvariable = self.strFechaNacimiento)
       self.txtFechaNacimiento.grid(row = 3, column = 1)
 
+      #Agregar etiqueta Altura variable = strAltura
+      self.lblAltura = Label(self.frmalta_alquista,text="Ingrese la altura por favor: ")
+      self.lblAltura.grid(row =4, column = 0, pady = 10, sticky = W)
+      self.txtAltura = Entry(self.frmalta_alquista, textvariable=self.strAltura)
+      self.txtAltura.grid(row = 4, column = 1)
+
       ##Etiqueta Administrador
       self.lblAdministrador = Label(self.frmalta_alquista, text = "Para que completen administradores: ")
-      self.lblAdministrador.grid(row =4, column = 0, pady = 10, sticky = W)
+      self.lblAdministrador.grid(row =5, column = 0, pady = 10, sticky = W)
       ##datos carga Administrador
       self.lblFechaInicio = Label(self.frmalta_alquista, text = "Ingrese fecha de Inicio: ")
-      self.lblFechaInicio.grid(row = 5, column = 0, sticky = W)
+      self.lblFechaInicio.grid(row = 6, column = 0, sticky = W)
       self.txtFechaInicio = Entry(self.frmalta_alquista,textvariable = self.strFechaInicio)
-      self.txtFechaInicio.grid( row = 5, column = 1)
+      self.txtFechaInicio.grid( row = 6, column = 1)
       self.lblNroAlquista = Label(self.frmalta_alquista, text="Ingrese número de Alquista: ")
-      self.lblNroAlquista.grid(row = 6, column = 0, sticky = W)
+      self.lblNroAlquista.grid(row = 7, column = 0, sticky = W)
       self.txtNroAlquista = Entry(self.frmalta_alquista,textvariable = self.strNroAlquista)
-      self.txtNroAlquista.grid(row = 6, column = 1)
+      self.txtNroAlquista.grid(row = 7, column = 1)
 
       self.frmBotones = Frame(self.alta_alquista)
       self.frmBotones.grid(row =2, column = 0)

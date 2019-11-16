@@ -62,7 +62,7 @@ def graficar_datos():
 
     
 
-    print("Has {} en el peso en:".format(strFelicitacion))
+    print("Has {} de peso".format(strFelicitacion))
     for filas in miCursor.fetchall():
         fechas.remove(filas[3])
         pesos.remove(filas[4])
