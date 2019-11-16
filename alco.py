@@ -360,7 +360,7 @@ class Inicio():
       self.txtUltimoPeso=Entry(self.frmCargaPeso, textvariable = self.CorregirPesoVar) #La variable CorregirPesoVar es para la carga del peso
       self.txtUltimoPeso.grid(row=2, column =1, padx = 5, pady =5)
       self.txtUltimoPeso.config(justify = "right")
-      self.btnAceptarPeso = Button(self.frmCargaPeso, text= "Guardar Peso", command = self.GuardarPeso, width = 10, height = 2)
+      self.btnAceptarPeso = Button(self.frmCargaPeso, text= "Guardar Peso", command = self.PantallaFelicitacion, width = 10, height = 2)
       self.btnAceptarPeso.grid(row = 3, column = 1, padx = 5, pady = 5,sticky = W+E)
       self.btnCorregirPeso = Button(self.frmCargaPeso, text= "Corregir Peso", width = 10, height = 2,command = self.CorregirPeso)
       self.btnCorregirPeso.grid(row = 3, column = 0, padx = 5, pady = 5,sticky = W+E)
@@ -369,12 +369,14 @@ class Inicio():
 
     def GuardarPeso(self):
 
+      """Pasamos la codificación para VentFelicitación
+
       self.IMC = float
       self.EstIMC = ""
-      """Esta función mostrará un mensaje con el IMC (si se pudiera calcular)
+      Esta función mostrará un mensaje con el IMC (si se pudiera calcular)
       el cálculo del peso posible, el peso deseable y cuántos kilos perdió o ganó.
       Si perdió kilos tiene que mostrar un mensaje que lo felicite y sino tiene que mostrar
-      un mensaje que lo incentiva"""
+      un mensaje que lo incentiva
       
       self.AvancePeso = Toplevel()
       self.frmAvancePeso = Frame(self.AvancePeso)
@@ -397,15 +399,98 @@ class Inicio():
       self.lblIMC = Label(self.frmAvancePeso, text = "Tu IMC actualizado hasta hoy es {}".format(self.IMC))
       self.lblIMC.grid(row = 1, column = 0, padx = 5, pady = 5)
 
+      if float(self.IMC) < 24.9:
+        self.EstIMC = "más bajo del recomendado"
       if float(self.IMC) >= 24.9 and float(self.IMC) <= 27.9:
         self.EstIMC = "normal"
       if float(self.IMC) >=28 and float(self.IMC) <= 34:
         self.EstIMC = "sobrepeso riesgo menor"
+      
 
       self.lblExplicacionIMC = Label(self.frmAvancePeso, text = "Ese IMC implica que tu peso es {}".format(self.EstIMC))
       self.lblExplicacionIMC.grid(row = 2, column = 0, padx = 5, pady = 5)
+
       self.miConexion.commit()
       self.miConexion.close()
+
+      self.PantallaFelicitacion() """
+    
+    def calculovariacionpeso(self):
+      """Terminar con el cálculo de variación del peso"""
+      
+      pass
+
+   
+
+
+
+    def PantallaFelicitacion(self):
+
+
+      self.IMC = float
+      self.EstIMC = ""
+
+      self.VentFelicitacion = Toplevel()
+      self.VentFelicitacion.title("Así van tus avances")
+      self.VentFelicitacion.resizable(width = False, height = False)
+      self.lblSaludo = Label(self.VentFelicitacion, text="Estadísticas básicas de tu progreso {} {}".format(self.consulta[0],self.consulta[1]), font = 'Arial 16', fg = 'white', bg = 'black')
+      self.lblSaludo.grid(row = 0, column = 1, padx = 5, pady = 5)
+      self.lblSaludo.config (justify = 'center')
+
+      self.VentFelicitacion.geometry('750x290+500+300')
+      self.VentFelicitacion.title("Alco SP")
+      self.VentFelicitacion.configure(background = 'black')
+      self.imagenAlcoSP=PhotoImage(file="imagenrecortada.png")
+
+      self.imgimagenAlcoSP = Label(self.VentFelicitacion, image = self.imagenAlcoSP, bd = 0)
+      self.imgimagenAlcoSP.grid(row = 0, column = 0,rowspan = 5)
+      
+
+      self.miConexion=sqlite3.connect(self.db_tabla)
+      self.miCursor = self.miConexion.cursor()
+      self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
+      self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia.get()),int(self.CorregirPesoVar.get())
+      self.miCursor.execute(self.query,self.parametros)
+     
+      print(self.parametros)
+
+      #Cálculo Indice Masa Corporal
+      self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
+
+      #Cálculo variación del peso
+
+      self.calculovariacionpeso()
+            
+
+
+
+      self.lblIMC = Label(self.VentFelicitacion, text = "Tu IMC actualizado hasta hoy es {0:.2f}".format(self.IMC))
+      self.lblIMC.grid(row = 1, column = 1, padx = 5, pady = 5, sticky = W)
+      self.lblIMC.config(bg = 'black', fg='white', justify = 'center')
+
+      if float(self.IMC) < 24.9:
+        self.EstIMC = "más bajo del recomendado"
+      if float(self.IMC) >= 24.9 and float(self.IMC) <= 27.9:
+        self.EstIMC = "normal"
+      if float(self.IMC) >=28 and float(self.IMC) <= 34:
+        self.EstIMC = "sobrepeso riesgo menor"
+      
+
+
+      self.lblExplicacionIMC = Label(self.VentFelicitacion, text = "Ese IMC implica que tu peso es {}".format(self.EstIMC))
+      self.lblExplicacionIMC.grid(row = 2, column = 1, padx = 5, pady = 5, sticky = W)
+      self.lblExplicacionIMC.config(fg = 'white',bg = 'black',justify = 'center')
+      #self.lblFelicitacion = Label(self.VentFelicitacion, text=("Has {} {} kilos".format(self.strFelicitacion,abs(self.resultado))))
+      #self.lblFelicitacion.grid(row = 3, column = 1, padx = 5, pady = 5, sticky = W)
+
+
+
+      self.miConexion.commit()
+      self.miConexion.close()
+      
+
+
+
 
    
 
