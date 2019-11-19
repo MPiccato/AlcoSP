@@ -415,11 +415,7 @@ class Inicio():
 
       self.PantallaFelicitacion() """
     
-    def calculovariacionpeso(self):
 
-      """Paso toda la información del alquista a una lista y luego la ordeno por el peso"""
-      pass
-      
    
 
     
@@ -433,8 +429,7 @@ class Inicio():
 
       self.IMC = float
       self.EstIMC = ""
-      self.UltimoPeso = float
-      self.AnteUltimoPeso = float
+
 
       self.VentFelicitacion = Toplevel()
       self.VentFelicitacion.title("Así van tus avances")
@@ -443,7 +438,7 @@ class Inicio():
       self.lblSaludo.grid(row = 0, column = 1, padx = 5, pady = 5)
       self.lblSaludo.config (justify = 'center')
 
-      self.VentFelicitacion.geometry('750x290+500+300')
+      self.VentFelicitacion.geometry('900x390+500+300')
       self.VentFelicitacion.title("Alco SP")
       self.VentFelicitacion.configure(background = 'black')
       self.imagenAlcoSP=PhotoImage(file="imagenrecortada.png")
@@ -520,10 +515,36 @@ class Inicio():
         self.fechas.append(self.filas[3])
         self.pesos.append(self.filas[4])
 
+      #Ordenando por fechas para después hacer el gráfico y comparar pesos
+
       self.pesoordenado = zip(self.fechas,self.pesos)
       self.ordenado = sorted(self.pesoordenado)
       print("Lista ordenada", self.ordenado)
       self.fechas,self.pesos = zip(*self.ordenado)
+
+      #calculando evolución de los pesos
+      self.UltPeso = self.pesos[len(self.pesos)-1]
+      self.AnteultPeso = self.pesos[len(self.pesos)-2]
+      self.resultado = self.UltPeso - self.AnteultPeso
+      self.strFelicitacion = ''
+      if self.resultado <=0:
+        self.strFelicitacion = "¡Felicidades! Has bajado de peso"
+      if self.resultado > 0:
+        self.strFelicitacion = "No bajaste de peso, pero no te aflijas"
+
+      self.lblPeso = Label(self.VentFelicitacion, text = "{}".format(self.strFelicitacion))
+      self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W)
+      self.lblPeso.config(fg = 'white',bg = 'black',justify = 'center')
+
+
+      self.fechas = list(self.fechas)
+      self.pesos = list(self.pesos)
+
+  
+      for self.filas in self.miCursor.fetchall():
+        self.fechas.remove(self.filas[3])
+        self.pesos.remove(self.filas[4])
+
 
 
 
