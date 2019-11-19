@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
-import numbers as np
+import numpy as np
 from  matplotlib import style
 style.use('fivethirtyeight')
 
@@ -21,7 +21,7 @@ class Inicio():
 
     db_tabla = 'ALQUISTA.db'
     
-    def __init__(self, ventana,*args,**kwargs):
+    def __init__(self, ventana):
 
       
       self.txtDatosVar = StringVar()
@@ -370,60 +370,28 @@ class Inicio():
     
 
 
-    def GuardarPeso(self):
 
-      """Pasamos la codificación para VentFelicitación
+    def grafico(self):
 
-      self.IMC = float
-      self.EstIMC = ""
-      Esta función mostrará un mensaje con el IMC (si se pudiera calcular)
-      el cálculo del peso posible, el peso deseable y cuántos kilos perdió o ganó.
-      Si perdió kilos tiene que mostrar un mensaje que lo felicite y sino tiene que mostrar
-      un mensaje que lo incentiva
-      
-      self.AvancePeso = Toplevel()
-      self.frmAvancePeso = Frame(self.AvancePeso)
-      self.AvancePeso.title("Así van tus avances")
-      self.frmAvancePeso.grid(row = 0, column = 0)
-      self.lblSaludo = Label(self.frmAvancePeso, text="Estadísticas básicas de tu progreso {} {}".format(self.consulta[0],self.consulta[1]), font = 'Arial 16')
-      self.lblSaludo.grid(row = 0, column = 0, padx = 5, pady = 5)
+      self.VentGrafico = Toplevel(self.VentFelicitacion)
+      self.VentGrafico.title("Evolución gráfica del peso")
 
-      self.miConexion=sqlite3.connect(self.db_tabla)
-      self.miCursor = self.miConexion.cursor()
-      self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
-      self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia.get()),int(self.CorregirPesoVar.get())
-      self.miCursor.execute(self.query,self.parametros)
-     
-      print(self.parametros)
+      x = np.array(self.fechas)
+      y = np.array(self.pesos)
 
-      #Cálculo Indice Masa Corporal
-      self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
-      
-      self.lblIMC = Label(self.frmAvancePeso, text = "Tu IMC actualizado hasta hoy es {}".format(self.IMC))
-      self.lblIMC.grid(row = 1, column = 0, padx = 5, pady = 5)
+      fig = Figure(figsize=(8,6))
+      a=fig.add_subplot(111)
+      a.plot(x,y,color='blue')
+      #a.plot(p,range(2+max(x)),color='blue')
+      #a.invert_yaxis()
+      a.set_title("Evolución del peso", fontsize=16)
+      a.set_ylabel("Peso", fontsize = 14)
+      a.set_xlabel("Fechas", fontsize = 14)
 
-      if float(self.IMC) < 24.9:
-        self.EstIMC = "más bajo del recomendado"
-      if float(self.IMC) >= 24.9 and float(self.IMC) <= 27.9:
-        self.EstIMC = "normal"
-      if float(self.IMC) >=28 and float(self.IMC) <= 34:
-        self.EstIMC = "sobrepeso riesgo menor"
-      
+      canvas = FigureCanvasTkAgg(fig, master = self.VentGrafico)
+      canvas.get_tk_widget().pack()
+      canvas.draw()
 
-      self.lblExplicacionIMC = Label(self.frmAvancePeso, text = "Ese IMC implica que tu peso es {}".format(self.EstIMC))
-      self.lblExplicacionIMC.grid(row = 2, column = 0, padx = 5, pady = 5)
-
-      self.miConexion.commit()
-      self.miConexion.close()
-
-      self.PantallaFelicitacion() """
-    
-
-   
-
-    
-
-   
 
 
 
@@ -441,7 +409,7 @@ class Inicio():
       self.lblSaludo.grid(row = 0, column = 1, padx = 5, pady = 5)
       self.lblSaludo.config (justify = 'center')
 
-      self.VentFelicitacion.geometry('700x290+500+300')
+      self.VentFelicitacion.geometry('700x290+300+400')
       self.VentFelicitacion.title("Alco SP")
       self.VentFelicitacion.configure(background = 'black')
       self.imagenAlcoSP=PhotoImage(file="imagenrecortada.png")
@@ -455,8 +423,6 @@ class Inicio():
       self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
       self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia.get()),int(self.CorregirPesoVar.get())
       self.miCursor.execute(self.query,self.parametros)
-     
-      print(self.parametros)
 
       #Cálculo Indice Masa Corporal
       self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
@@ -537,18 +503,11 @@ class Inicio():
 
       self.lblPeso = Label(self.VentFelicitacion, text = "{}".format(self.strFelicitacion))
       self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
-      self.lblPeso.config(fg = 'blue',bg = 'black',justify = 'center', font = "Helvetic 20")
+      self.lblPeso.config(fg = 'blue',bg = 'white',justify = 'center',font = "Helvetic 20")
 
 
-      #Acá vamos a intentar incrustar el gráfico
-      self.consultaNombre = (self.query)
-      self.miCursor.execute(self.consultaNombre)
-      self.strNombre = self.miCursor.fetchone()
-      plt.title("Evolución del peso de {} {}".format(self.strNombre[0],self.strNombre[1]))
-      plt.xlabel("Fechas del peso")
-      plt.ylabel("Peso observado")
-      plt.plot(self.fechas,self.pesos)
-      plt.show()
+      #Llamo a la función gráfico
+      self.grafico()
 
 
       self.fechas = list(self.fechas)
