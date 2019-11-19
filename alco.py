@@ -373,13 +373,17 @@ class Inicio():
 
     def grafico(self):
 
+      self.cargadepeso.withdraw()
+
+      self.VentFelicitacion.withdraw()
+
       self.VentGrafico = Toplevel(self.VentFelicitacion)
       self.VentGrafico.title("Evolución gráfica del peso")
 
       x = np.array(self.fechas)
       y = np.array(self.pesos)
 
-      fig = Figure(figsize=(8,6))
+      fig = Figure(figsize=(10,10))
       a=fig.add_subplot(111)
       a.plot(x,y,color='blue')
       #a.plot(p,range(2+max(x)),color='blue')
@@ -409,13 +413,13 @@ class Inicio():
       self.lblSaludo.grid(row = 0, column = 1, padx = 5, pady = 5)
       self.lblSaludo.config (justify = 'center')
 
-      self.VentFelicitacion.geometry('700x290+300+400')
+      self.VentFelicitacion.geometry('900x290+300+400')
       self.VentFelicitacion.title("Alco SP")
       self.VentFelicitacion.configure(background = 'black')
       self.imagenAlcoSP=PhotoImage(file="imagenrecortada.png")
 
       self.imgimagenAlcoSP = Label(self.VentFelicitacion, image = self.imagenAlcoSP, bd = 0)
-      self.imgimagenAlcoSP.grid(row = 0, column = 0,rowspan = 5)
+      self.imgimagenAlcoSP.grid(row = 0, column = 0,rowspan = 6)
       
 
       self.miConexion=sqlite3.connect(self.db_tabla)
@@ -496,18 +500,22 @@ class Inicio():
       self.AnteultPeso = self.pesos[len(self.pesos)-2]
       self.resultado = self.UltPeso - self.AnteultPeso
       self.strFelicitacion = ''
-      if self.resultado <=0:
+      if self.resultado <0:
         self.strFelicitacion = "¡Felicidades! Has bajado de peso"
       if self.resultado > 0:
         self.strFelicitacion = "No bajaste de peso, pero no te aflijas"
+      if self.resultado == 0:
+        self.strFelicitacion = "Mantuviste el peso, sigue así"
 
       self.lblPeso = Label(self.VentFelicitacion, text = "{}".format(self.strFelicitacion))
       self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
       self.lblPeso.config(fg = 'blue',bg = 'white',justify = 'center',font = "Helvetic 20")
 
+      self.btnMostrarGrafico = Button(self.VentFelicitacion, text ="Quiero ver el gráfico", command = self.grafico)
+      self.btnMostrarGrafico.config(width = 10, height = 6)
+      self.btnMostrarGrafico.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = W+E)
 
-      #Llamo a la función gráfico
-      self.grafico()
+
 
 
       self.fechas = list(self.fechas)
