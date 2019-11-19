@@ -416,19 +416,25 @@ class Inicio():
       self.PantallaFelicitacion() """
     
     def calculovariacionpeso(self):
-      """Terminar con el cálculo de variación del peso"""
-      
+
+      """Paso toda la información del alquista a una lista y luego la ordeno por el peso"""
       pass
+      
+   
+
+    
 
    
 
 
 
-    def PantallaFelicitacion(self):
+    def PantallaFelicitacion(self, *args, **kwargs):
 
 
       self.IMC = float
       self.EstIMC = ""
+      self.UltimoPeso = float
+      self.AnteUltimoPeso = float
 
       self.VentFelicitacion = Toplevel()
       self.VentFelicitacion.title("Así van tus avances")
@@ -457,23 +463,37 @@ class Inicio():
       #Cálculo Indice Masa Corporal
       self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
 
-      #Cálculo variación del peso
-
-      #self.calculovariacionpeso()
-            
-
 
 
       self.lblIMC = Label(self.VentFelicitacion, text = "Tu IMC actualizado hasta hoy es {0:.2f}".format(self.IMC))
       self.lblIMC.grid(row = 1, column = 1, padx = 5, pady = 5, sticky = W)
       self.lblIMC.config(bg = 'black', fg='white', justify = 'center')
 
-      if float(self.IMC) < 24.9:
+      if float(self.IMC) < 18.5:
         self.EstIMC = "más bajo del recomendado"
-      if float(self.IMC) >= 24.9 and float(self.IMC) <= 27.9:
+      if float(self.IMC) >= 18.5 and float(self.IMC) <= 24.9:
         self.EstIMC = "normal"
-      if float(self.IMC) >=28 and float(self.IMC) <= 34:
-        self.EstIMC = "sobrepeso riesgo menor"
+      if float(self.IMC) >=25 and float(self.IMC) <= 29.9:
+        self.EstIMC = "Obesidad I \n(muy pocas complicaciones físicas y mínimo impacto de ánimo)"
+      if float(self.IMC) >=30 and float(self.IMC)<=34.9:
+        self.EstIMC ="Obesidad II \n(riesgo de diabetes, colesterol, várices, hipertensión, gota)"
+      if float(self.IMC)>= 35 and float(self.IMC)<=39.9:
+        self.EstIMC = "Obesidad III \n(apnea del sueño, artrosis, hígado graso)"
+      if float(self.IMC)>=40 and float(self.IMC)<=49.9:
+        self.EstIMC = "Obesidad IV \n(falta de aire, tromboflebitis, eripela)"
+      if float(self.IMC)>=50 and float(self.IMC)<=64.9:
+        self.EstIMC = "Obesidad V \n(Problemas de hemorroides, complicaciones cardíacas)"
+      if float(self.IMC)>= 65 and float(self.IMC)<= 79.9:
+        self.EstIMC = "Obesidad VI \n(Discapacidad severa)"
+      if float(self.IMC)>=80 and float(self.IMC)<=99.9:
+        self.EstIMC = "Obesidad VII \n(úlceras en piernas, escaras)"
+      if float(self.IMC) >= 100:
+        self.EstIMC = "Postración. Deterioro de funciones vitales"
+    
+
+
+
+      
       
 
 
@@ -483,10 +503,38 @@ class Inicio():
       #self.lblFelicitacion = Label(self.VentFelicitacion, text=("Has {} {} kilos".format(self.strFelicitacion,abs(self.resultado))))
       #self.lblFelicitacion.grid(row = 3, column = 1, padx = 5, pady = 5, sticky = W)
 
-
-
       self.miConexion.commit()
       self.miConexion.close()
+
+      self.miConexion=sqlite3.connect(self.db_tabla)
+      self.miCursor = self.miConexion.cursor()
+      self.query = ("SELECT * FROM PESOALQUISTA WHERE NROALQUISTA =" + self.txtDatosVar.get())
+      self.miCursor.execute(self.query)
+      
+      
+      
+      self.fechas = []
+      self.pesos =[]
+      self.datos = self.miCursor.fetchall()
+      for self.filas in self.datos:
+        self.fechas.append(self.filas[3])
+        self.pesos.append(self.filas[4])
+
+      self.pesoordenado = zip(self.fechas,self.pesos)
+      self.ordenado = sorted(self.pesoordenado)
+      print("Lista ordenada", self.ordenado)
+      self.fechas,self.pesos = zip(*self.ordenado)
+
+
+
+      
+      
+      self.miCursor.close()
+      self.miConexion.close()
+     
+
+
+  
       
 
 
