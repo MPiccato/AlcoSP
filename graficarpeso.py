@@ -2,6 +2,9 @@ import sqlite3
 import time
 import datetime
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+import numpy as np
 import matplotlib.dates as mdates
 
 
@@ -10,6 +13,7 @@ strNombre = ""
 
 MiConexion = sqlite3.connect('ALQUISTA.DB')
 miCursor = MiConexion.cursor()
+
 
 
 
@@ -62,6 +66,8 @@ def graficar_datos():
         strFelicitacion = "bajado"
     else:
         strFelicitacion = "subido"
+
+    #Acá va agregado el gráfico con la evolución del peso, quizás en otra función
 
 
 

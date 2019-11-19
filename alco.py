@@ -8,6 +8,9 @@ import sqlite3
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+import numbers as np
 from  matplotlib import style
 style.use('fivethirtyeight')
 
@@ -18,7 +21,7 @@ class Inicio():
 
     db_tabla = 'ALQUISTA.db'
     
-    def __init__(self, ventana):
+    def __init__(self, ventana,*args,**kwargs):
 
       
       self.txtDatosVar = StringVar()
@@ -438,7 +441,7 @@ class Inicio():
       self.lblSaludo.grid(row = 0, column = 1, padx = 5, pady = 5)
       self.lblSaludo.config (justify = 'center')
 
-      self.VentFelicitacion.geometry('900x390+500+300')
+      self.VentFelicitacion.geometry('700x290+500+300')
       self.VentFelicitacion.title("Alco SP")
       self.VentFelicitacion.configure(background = 'black')
       self.imagenAlcoSP=PhotoImage(file="imagenrecortada.png")
@@ -533,8 +536,19 @@ class Inicio():
         self.strFelicitacion = "No bajaste de peso, pero no te aflijas"
 
       self.lblPeso = Label(self.VentFelicitacion, text = "{}".format(self.strFelicitacion))
-      self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W)
-      self.lblPeso.config(fg = 'white',bg = 'black',justify = 'center')
+      self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
+      self.lblPeso.config(fg = 'blue',bg = 'black',justify = 'center', font = "Helvetic 20")
+
+
+      #Acá vamos a intentar incrustar el gráfico
+      self.consultaNombre = (self.query)
+      self.miCursor.execute(self.consultaNombre)
+      self.strNombre = self.miCursor.fetchone()
+      plt.title("Evolución del peso de {} {}".format(self.strNombre[0],self.strNombre[1]))
+      plt.xlabel("Fechas del peso")
+      plt.ylabel("Peso observado")
+      plt.plot(self.fechas,self.pesos)
+      plt.show()
 
 
       self.fechas = list(self.fechas)
