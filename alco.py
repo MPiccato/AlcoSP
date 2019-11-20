@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import modulo_licencia
 import calendar
 import time
 import datetime
@@ -49,7 +50,7 @@ class Inicio():
 #Login al sistema
 
       self.VentLogin = ventana
-      self.VentLogin.geometry('440x180+500+300')
+      self.VentLogin.geometry('480x180+500+300')
       self.VentLogin.title("Ingreso y Autenticación")
       self.frmimagenlogin=Frame(self.VentLogin)
       self.frmimagenlogin.grid(row = 0, column = 0, sticky = N+W)
@@ -701,16 +702,29 @@ class Inicio():
 
 
     def Licencia(self):
-      self.VentLicencia = Toplevel()
-      self.VentLicencia.title("PicTrading para MPiccato")
-      self.VentLicencia.geometry('440x180+500+300')
-      self.imgLicencia = PhotoImage(file = 'mpiccato-twit.png')
-      self.frmlogo = Frame(self.VentLicencia)
-      self.frmlogo.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = N+W)
-      self.lblimgLicencia = Label(self.frmlogo, image = self.imgLicencia)
-      self.lblimgLicencia.grid(row=0,column=0)
-      self.frmNotasLicencia = Label(self.VentLicencia)
-      self.frmNotasLicencia.grid(row = 0, column = 1, padx = 5, pady = 5)
+
+        self.imageLicence = PhotoImage(file = "mpiccato_licencia.png")
+
+        
+
+
+        self.VentLicencia = Toplevel()
+        self.VentLicencia.geometry('580x240+500+300')
+        self.VentLicencia.resizable(width = False, height = False)
+        self.VentLicencia.title("Licencia PicTrading")
+        self.frmimagenlogin=Frame(self.VentLicencia)
+        self.frmimagenlogin.grid(row = 0, column = 0, padx = 10,sticky = N+W)
+        self.imagen = Label(self.frmimagenlogin,image=self.imageLicence)
+        self.imagen.grid(row = 0,column =0, padx = 5, pady = 5)
+        self.frmlogin = Frame(self.VentLicencia)
+        self.frmlogin.grid(row=0, column =1, padx = 5, pady = 5)
+        self.lblLoginUsuario = Label(self.frmlogin, text = "Producto realizado por Pictrading", font = "Helvetic 18")
+        self.lblLoginUsuario.grid(row = 0, column = 0,padx=5,pady =5, sticky = W)
+        self.lblLoginPass = Label(self.frmlogin, text ="Copyright, todos los derechos reservados")
+        self.lblLoginPass.grid(row=1,column = 0,padx =5, pady = 5, sticky = W)
+        self.btnLogin = Button(self.frmlogin, text="Entendido",  width = 20, height = 2, command=lambda : self.VentLicencia.destroy())
+        self.btnLogin.grid(row = 2, column =0, padx = 5, pady=5, sticky = W+E)
+
 
 
     def SalirAplicacion(self):
