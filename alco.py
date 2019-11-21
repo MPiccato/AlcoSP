@@ -312,11 +312,13 @@ class Inicio():
        
        #Reflejando los datos en la tabla
        for fila in db_filas:
-           self.tablaActualizar.insert('',0, text = fila[0], values = (fila[1],fila[2],fila[3],fila[4]))
+           self.tablaActualizar.insert('',0, text = fila[0], values = (fila[1],fila[2],fila[3],fila[4], fila[5]))
     
     
     
     def actualizar_elementos(self, strNombre,strApellido,strDNI,strNroAlquista):
+        """ Acá va el módulo de actualizar alquista que hice hace unos días"""
+
         query = 'UPDATE ALQUISTAS SET NOMBRE = ?, APELLIDO = ?, DNI = ?, NROALQUISTA = ? WHERE NOMBRE = ?, APELLIDO = ?, DNI = ?, NROALQUISTA=?'
         parameters = (strNombre,strApellido,strDNI,strNroAlquista)
         self.ejecutar_tabla(query,parameters)
@@ -348,7 +350,7 @@ class Inicio():
       #self.VentPrincipal.iconify()
       self.cargadepeso.title("Vamos a registrar el peso: ")
       self.cargadepeso.geometry('630x260+300+300')
-      self.lblimagenbalanza = Label(self.cargadepeso, text = "Qué bueno que estés acá haciendo esto {} {}".format(self.consulta[0],self.consulta[1]), font ="Arial 16", fg= "blue")
+      self.lblimagenbalanza = Label(self.cargadepeso, text = "Qué bueno que estés acá haciendo esto {} {}".format(self.consulta[0],self.consulta[1]))
       self.lblimagenbalanza.grid(row = 0, column = 0, padx = 10, pady = 10)
 
       self.frmCargaPeso = LabelFrame(self.cargadepeso, text ="Ahora vamos a anotar tu peso actual")
@@ -430,13 +432,19 @@ class Inicio():
       self.miCursor.execute(self.query,self.parametros)
 
       #Cálculo Indice Masa Corporal
-      self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
+      if len(str(self.consulta[6]))!= 0:
+        self.IMC = float(self.CorregirPesoVar.get())/float((self.consulta[6])**2)
+        self.lblIMC = Label(self.VentFelicitacion, text = "Tu IMC actualizado hasta hoy es {0:.2f}".format(self.IMC))
+        self.lblIMC.grid(row = 1, column = 1, padx = 5, pady = 5, sticky = W)
+        self.lblIMC.config(bg = 'black', fg='white', justify = 'center')
+      else:
+        messagebox.showinfo("Alco SP", "No se puede calcular IMC porque falta carga la altura")
 
 
 
-      self.lblIMC = Label(self.VentFelicitacion, text = "Tu IMC actualizado hasta hoy es {0:.2f}".format(self.IMC))
+      """self.lblIMC = Label(self.VentFelicitacion, text = "Tu IMC actualizado hasta hoy es {0:.2f}".format(self.IMC))
       self.lblIMC.grid(row = 1, column = 1, padx = 5, pady = 5, sticky = W)
-      self.lblIMC.config(bg = 'black', fg='white', justify = 'center')
+      self.lblIMC.config(bg = 'black', fg='white', justify = 'center') """
 
       if float(self.IMC) < 18.5:
         self.EstIMC = "más bajo del recomendado"
