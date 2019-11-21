@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
+from io import open
 import numpy as np
 from  matplotlib import style
 style.use('fivethirtyeight')
@@ -23,6 +24,7 @@ class Inicio():
     db_tabla = 'ALQUISTA.db'
     
     def __init__(self, ventana):
+
 
       
       self.txtDatosVar = StringVar()
@@ -85,18 +87,18 @@ class Inicio():
 
   
 
-      self.barraMenu.add_cascade(label = "Informes y estadísticas", menu = self.MenuInformes)
+      self.barraMenu.add_cascade(label = "Informes y estadísticas", menu = self.MenuInformes, state = 'disabled')
       self.barraMenu.add_cascade(label = "Configuración", menu = self.MenuConfiguracion)
       self.barraMenu.add_cascade(label = "Licencia", menu = self.MenuLicencia)
       self.MenuPrincipal.add_command(label = "Control del peso",state = DISABLED)
       self.MenuPrincipal.add_command(label = "Dar de Alta...", command = self.DardeAlta_alquista)
-      self.MenuPrincipal.add_command(label = "Actualizar Alquista...", command = self.Actualizaralquista)
+      self.MenuPrincipal.add_command(label = "Actualizar Alquista...", command = self.Actualizaralquista, state = 'disabled')
       self.MenuPrincipal.add_separator()
       self.MenuPrincipal.add_command(label="Dar de Baja...", command = self.DardeBaja_Alquista)
       self.MenuPrincipal.add_separator()
 
       self.MenuPrincipal.add_command(label="Salir",command =self.SalirAplicacion)
-      self.MenuConfiguracion.add_command(label = "Agregar o modificar Usuarios/Adms", command = self.ConfigUsuarios)
+      self.MenuConfiguracion.add_command(label = "Agregar o modificar Usuarios/Adms", command = self.ConfigUsuarios, state = 'disabled')
       
       self.lblfrmDatos =LabelFrame(self.VentPrincipal, text ="Ingrese los datos a consultar o completar:")
       self.lblfrmDatos.config(bg = "white", fg = "orange",font = "Arial 16")
@@ -164,6 +166,14 @@ class Inicio():
 
 
 
+    def fechalicencia(self):
+      pass
+      """
+      self.archivo_texto = open('ar.txt', r)
+      self.texto = self.archivo_texto.read()
+      if str(self.texto)== str(datetime.date.today()):
+        messagebox.showwarning('Por favor comuníquese con su desarrollador', 'El programa se cerrará porque caaducó el período de prueba')
+        sys.exit()"""
 
     def ConfigUsuarios(self):
       self.strIdUsuarios = StringVar()
@@ -199,6 +209,7 @@ class Inicio():
 
 
     def login(self):
+      self.fechalicencia()
       loginnroalquista = bool()
       loginpass = bool()
       loginnroalquista = False
@@ -275,6 +286,15 @@ class Inicio():
       self.get_productos()
 
 
+    def informesclientes(self):
+      """
+
+      c= canvas.Canvas("prueba informe.pdf")
+      c.save()
+      """
+
+
+      pass
 
     def AgregarUsuario(self):
 
@@ -317,13 +337,19 @@ class Inicio():
     
     
     def actualizar_elementos(self, strNombre,strApellido,strDNI,strNroAlquista):
-        """ Acá va el módulo de actualizar alquista que hice hace unos días"""
+        """ Acá va el módulo de actualizar alquista que hice hace unos días
 
-        query = 'UPDATE ALQUISTAS SET NOMBRE = ?, APELLIDO = ?, DNI = ?, NROALQUISTA = ? WHERE NOMBRE = ?, APELLIDO = ?, DNI = ?, NROALQUISTA=?'
-        parameters = (strNombre,strApellido,strDNI,strNroAlquista)
-        self.ejecutar_tabla(query,parameters)
-        self.get_productos()
-    
+        self.mensaje['text'] = ''
+        try:
+            self.tabla.item(self.tabla.selection())['text'][0]
+        except IndexError as e:
+            self.mensaje['text'] = 'Por favor selecciona un registro'
+            return
+        nombre = self.tabla.item(self.tabla.selection())['text']
+        old_price = self.tabla.item(self.tabla.selection())['values'][0]
+        self.edit_wind = Toplevel()
+        self.edit_wind.title = "Editar productos"
+        """
     
     
     def CorregirPeso(self):
