@@ -175,7 +175,7 @@ class Inicio():
     def fechalicencia(self):
       pass
       """
-      self.archivo_texto = open('ar.txt', r)
+      self.archivo_texto = open('C:\Users\Talia\Documents\cargaalquista\build\ar.txt', r)
       self.texto = self.archivo_texto.read()
       if str(self.texto)== str(datetime.date.today()):
         messagebox.showwarning('Por favor comuníquese con su desarrollador', 'El programa se cerrará porque caaducó el período de prueba')
