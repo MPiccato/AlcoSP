@@ -27,7 +27,7 @@ style.use('fivethirtyeight')
 class Inicio():
 
 
-    db_tabla = 'BASEALQUISTAS.db'
+    db_tabla = 'ALQUISTA.db'
     
     def __init__(self, ventana):
 
@@ -174,13 +174,7 @@ class Inicio():
 
     def fechalicencia(self):
       pass
-      """
-      self.archivo_texto = open('C:\Users\Talia\Documents\cargaalquista\build\ar.txt', r)
-      self.texto = self.archivo_texto.read()
-      if str(self.texto)== str(datetime.date.today()):
-        messagebox.showwarning('Por favor comuníquese con su desarrollador', 'El programa se cerrará porque caaducó el período de prueba')
-        sys.exit()"""
-
+    
     def ConfigUsuarios(self):
       self.strIdUsuarios = StringVar()
       self.strConfigNroAlquista = StringVar()
@@ -215,7 +209,6 @@ class Inicio():
 
 
     def login(self):
-      self.fechalicencia()
       loginnroalquista = bool()
       loginpass = bool()
       loginnroalquista = False
@@ -312,7 +305,7 @@ class Inicio():
 
     def AgregarUsuario(self):
 
-      self.miConexion = sqlite3.connect("BASEALQUISTAS.DB")
+      self.miConexion = sqlite3.connect("ALQUISTA.DB")
       self.miCursor = self.miConexion.cursor()
       self.query = ("INSERT INTO USUARIOS VALUES (?,?,?)")
 
@@ -456,8 +449,8 @@ class Inicio():
 
       #En otro momento agregar la opción de imprimir
       
-      NombreArchivo = str(self.consulta[0])+'_'+ str(datetime.date.today())+'.pdf'
-      f = canvas.Canvas(NombreArchivo)
+      #NombreArchivo = str(self.consulta[0])+'_'+ str(datetime.date.today())+'.pdf'
+      f = canvas.Canvas('prueba.pdf')
 
       #Agregar título: "Estado de tu avance"
       #Agregar subtítulo: Nombre Alquista
@@ -487,6 +480,7 @@ class Inicio():
           text.textLines(lines)
 
       f.drawText(text)
+      self.VentPrincipal.deiconify()
 
       
 
@@ -495,6 +489,8 @@ class Inicio():
       Image=ImageReader(DatosGrafico)
       f.drawImage(Image,45,131,width = 500, height = 350)
       f.save()
+
+      
 
    
 
