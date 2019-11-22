@@ -450,7 +450,21 @@ class Inicio():
       DataPlot = FigureCanvasTkAgg(fig, master = self.VentGrafico)
       DataPlot.get_tk_widget().pack()
       DataPlot.draw()
+      
+      #Creación del archivo .pdf (el informe debe aparecer en una carpeta con todos los informes
+      #de los alquistas)
+
+      #En otro momento agregar la opción de imprimir
+      
+
       f = canvas.Canvas('prueba.pdf')
+
+      #Agregar título: "Estado de tu avance"
+      #Agregar subtítulo: Nombre Alquista
+      #Agregar gráfico con últimos cuatro pesos
+      #Agregar gráfico con cálculo desde el peso inicial al final
+      #Agregar leyenda de felicitación o dando ánimo
+
       Image=ImageReader(DatosGrafico)
       f.drawImage(Image,45,171,width = 500, height = 500)
       f.save()
@@ -460,6 +474,8 @@ class Inicio():
 
 
     def PantallaFelicitacion(self, *args, **kwargs):
+
+
 
       
 
@@ -558,32 +574,35 @@ class Inicio():
 
       #Ordenando por fechas para después hacer el gráfico y comparar pesos
 
-      self.pesoordenado = zip(self.fechas,self.pesos)
-      self.ordenado = sorted(self.pesoordenado)
-      print("Lista ordenada", self.ordenado)
-      self.fechas,self.pesos = zip(*self.ordenado)
+      if len(self.pesos)>1:
+        self.pesoordenado = zip(self.fechas,self.pesos)
+        self.ordenado = sorted(self.pesoordenado)
+        print("Lista ordenada", self.ordenado)
+        self.fechas,self.pesos = zip(*self.ordenado)
 
-      #calculando evolución de los pesos
-      self.UltPeso = self.pesos[len(self.pesos)-1]
-      self.AnteultPeso = self.pesos[len(self.pesos)-2]
-      self.resultado = self.UltPeso - self.AnteultPeso
-      self.strFelicitacion = ''
-      if self.resultado <0:
-        self.strFelicitacion = "¡Felicidades! Has bajado de peso"
-      if self.resultado > 0:
-        self.strFelicitacion = "No bajaste de peso, pero no te aflijas"
-      if self.resultado == 0:
-        self.strFelicitacion = "Mantuviste el peso, sigue así"
+        #calculando evolución de los pesos
+        self.UltPeso = self.pesos[len(self.pesos)-1]
+        self.AnteultPeso = self.pesos[len(self.pesos)-2]
+        self.resultado = self.UltPeso - self.AnteultPeso
+        self.strFelicitacion = ''
+        if self.resultado <0:
+          self.strFelicitacion = "¡Felicidades! Has bajado de peso"
+        if self.resultado > 0:
+          self.strFelicitacion = "No bajaste de peso, pero no te aflijas"
+        if self.resultado == 0:
+          self.strFelicitacion = "Mantuviste el peso, sigue así"
 
-      self.lblPeso = Label(self.VentFelicitacion, text = "{}".format(self.strFelicitacion))
-      self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
-      self.lblPeso.config(fg = 'blue',bg = 'white',justify = 'center',font = "Helvetic 20")
+        self.lblPeso = Label(self.VentFelicitacion, text = "{}".format(self.strFelicitacion))
+        self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
+        self.lblPeso.config(fg = 'blue',bg = 'white',justify = 'center',font = "Helvetic 20")
 
-      self.btnMostrarGrafico = Button(self.VentFelicitacion, text ="Quiero ver el gráfico", command = self.grafico)
-      self.btnMostrarGrafico.config(width = 10, height = 6)
-      self.btnMostrarGrafico.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = W+E)
-
-      self.informesclientes()
+        self.btnMostrarGrafico = Button(self.VentFelicitacion, text ="Quiero ver el gráfico", command = self.grafico)
+        self.btnMostrarGrafico.config(width = 10, height = 6)
+        self.btnMostrarGrafico.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = W+E)
+      else:
+        self.LblPeso = Label(self.VentFelicitacion, text="No es posible saber si subiste o bajaste")
+        self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
+     
 
 
       self.fechas = list(self.fechas)
