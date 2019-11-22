@@ -7,13 +7,16 @@ import time
 import datetime
 import sqlite3
 import sys
-from reportlab.pdfgen import canvas
+import io
+
 from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
+from reportlab.pdfgen import canvas
+from reportlab.pdfgen import canvas
 from io import open
 import numpy as np
 from  matplotlib import style
@@ -289,10 +292,20 @@ class Inicio():
       self.get_productos()
 
 
-    def informesclientes(self):
-      
-      
+    def informesclientes(self, *args,**kwargs):
+
       pass
+
+      
+
+      
+
+
+
+
+      
+      
+
 
 
       
@@ -401,7 +414,7 @@ class Inicio():
 
 
 
-    def grafico(self):
+    def grafico(self, *args, **kwargs):
 
       self.cargadepeso.withdraw()
 
@@ -409,6 +422,7 @@ class Inicio():
 
       self.VentGrafico = Toplevel(self.VentFelicitacion)
       self.VentGrafico.title("Evolución gráfica del peso")
+      
 
       x = np.array(self.fechas)
       y = np.array(self.pesos)
@@ -422,13 +436,32 @@ class Inicio():
       a.set_ylabel("Peso", fontsize = 14)
       a.set_xlabel("Fechas", fontsize = 14)
 
-      canvas = FigureCanvasTkAgg(fig, master = self.VentGrafico)
-      canvas.get_tk_widget().pack()
-      canvas.draw()
+      
+      DatosGrafico = io.BytesIO()
+      fig.savefig(DatosGrafico, format = 'jpeg')
+      DatosGrafico.seek(0)
+
+     
+
+
+
+
+
+      DataPlot = FigureCanvasTkAgg(fig, master = self.VentGrafico)
+      DataPlot.get_tk_widget().pack()
+      DataPlot.draw()
+      f = canvas.Canvas('prueba.pdf')
+      Image=ImageReader(DatosGrafico)
+      f.drawImage(Image,45,171,width = 500, height = 500)
+      f.save()
+
+   
 
 
 
     def PantallaFelicitacion(self, *args, **kwargs):
+
+      
 
 
       self.IMC = float
@@ -550,7 +583,7 @@ class Inicio():
       self.btnMostrarGrafico.config(width = 10, height = 6)
       self.btnMostrarGrafico.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = W+E)
 
-
+      self.informesclientes()
 
 
       self.fechas = list(self.fechas)
