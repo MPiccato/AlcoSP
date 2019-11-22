@@ -27,7 +27,7 @@ style.use('fivethirtyeight')
 class Inicio():
 
 
-    db_tabla = 'ALQUISTA.db'
+    db_tabla = 'BASEALQUISTAS.db'
     
     def __init__(self, ventana):
 
@@ -312,7 +312,7 @@ class Inicio():
 
     def AgregarUsuario(self):
 
-      self.miConexion = sqlite3.connect("ALQUISTA.DB")
+      self.miConexion = sqlite3.connect("BASEALQUISTAS.DB")
       self.miCursor = self.miConexion.cursor()
       self.query = ("INSERT INTO USUARIOS VALUES (?,?,?)")
 
@@ -452,12 +452,12 @@ class Inicio():
       DataPlot.draw()
       
       #Creación del archivo .pdf (el informe debe aparecer en una carpeta con todos los informes
-      #de los alquistas)
+      #de los BASEALQUISTAS)
 
       #En otro momento agregar la opción de imprimir
       
-
-      f = canvas.Canvas('prueba.pdf')
+      NombreArchivo = str(self.consulta[0])+'_'+ str(datetime.date.today())+'.pdf'
+      f = canvas.Canvas(NombreArchivo)
 
       #Agregar título: "Estado de tu avance"
       #Agregar subtítulo: Nombre Alquista
@@ -465,8 +465,35 @@ class Inicio():
       #Agregar gráfico con cálculo desde el peso inicial al final
       #Agregar leyenda de felicitación o dando ánimo
 
+      title = "Informe de avance del alquista"
+      subtitle = str(self.consulta[0]) + "del día "+ " " + str(datetime.date.today())
+      textLines :list
+      textLines = ['Tu IMC es: ',str(self.IMC),'\n',"Dado el último peso cargado:", str(self.strFelicitacion),'\n','Subiste o bajaste: ', str(self.resultado), 'kilos']
+
+
+      f.setTitle(title)
+      f.setFont('Helvetica-Bold', 24)
+
+      f.drawCentredString(300,790, title)
+      f.setFont('Courier-Bold',22)
+      f.setFillColorRGB(0,0,255)
+      f.drawCentredString(300,758, subtitle)
+
+      text = f.beginText(40,680)
+      text.setFont('Courier', 20)
+      text.setFillColor(colors.black)
+
+      for lines in textLines:
+          text.textLines(lines)
+
+      f.drawText(text)
+
+      
+
+
+
       Image=ImageReader(DatosGrafico)
-      f.drawImage(Image,45,171,width = 500, height = 500)
+      f.drawImage(Image,45,131,width = 500, height = 350)
       f.save()
 
    
@@ -505,6 +532,10 @@ class Inicio():
       self.query = ("INSERT INTO PESOALQUISTA VALUES (?,?,?,?,?)")
       self.parametros = str(self.consulta[0]), str(self.consulta[1]),str(self.consulta[5]),str(self.dia.get()),int(self.CorregirPesoVar.get())
       self.miCursor.execute(self.query,self.parametros)
+
+      #Variables para informe
+      self.NombreInforme = str(self.consulta[0])
+      
 
       #Cálculo Indice Masa Corporal
       if len(str(self.consulta[6]))!= 0:
@@ -596,7 +627,7 @@ class Inicio():
         self.lblPeso.grid(row = 4, column = 1, padx = 5, pady = 5, sticky = W+E)
         self.lblPeso.config(fg = 'blue',bg = 'white',justify = 'center',font = "Helvetic 20")
 
-        self.btnMostrarGrafico = Button(self.VentFelicitacion, text ="Quiero ver el gráfico", command = self.grafico)
+        self.btnMostrarGrafico = Button(self.VentFelicitacion, text ="Generar gráfico e informe", command = self.grafico)
         self.btnMostrarGrafico.config(width = 10, height = 6)
         self.btnMostrarGrafico.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = W+E)
       else:
