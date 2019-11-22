@@ -7,6 +7,9 @@ import time
 import datetime
 import sqlite3
 import sys
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -287,14 +290,12 @@ class Inicio():
 
 
     def informesclientes(self):
-      """
-
-      c= canvas.Canvas("prueba informe.pdf")
-      c.save()
-      """
-
-
+      
+      
       pass
+
+
+      
 
     def AgregarUsuario(self):
 
